@@ -28,8 +28,17 @@ var distance = function (x0, y0, x1, y1) {
   return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
 };
 
-//length from target to farthest corner of the screen
-var maxLength = Math.sqrt(targetX ** 2 + targetY ** 2);
+//determine the longest diagonal from target to furthest corner of screen
+var getMax = function() {
+  var q1 = Math.sqrt(((boxWidth - targetX) ** 2) + ((boxHeight - targetY) ** 2));
+  var q2 = Math.sqrt(((targetX) ** 2) + ((targetY) ** 2));
+  var q3 = Math.sqrt(((targetX) ** 2) + ((boxHeight - targetY) ** 2));
+  var q4 = Math.sqrt(((boxWidth - targetX) ** 2) + ((targetY) ** 2));
+  return Math.max(q1,q2,q3,q4);
+};
+
+//longest possible distance from target
+var maxLength = getMax();
 
 //find location of mouse and change color
 var findIt = function(e) {
@@ -39,12 +48,15 @@ var findIt = function(e) {
   var mouseDistance = distance(e.x, e.y, targetX, targetY);
   console.log("mousedist " + mouseDistance);
 
-  //255 - ratio of mouseDistance to maxLength for rgb colors
-  var color = 255 - Math.floor(255 * (mouseDistance / maxLength));
-  console.log("color " + color);
+  //100 - ratio of mouseDistance to maxLength for hsl colors
+  var shade = 100 - Math.floor(100 * (mouseDistance / maxLength));
+  console.log("shade " + shade);
 
-  //change background color using rgb
-  box.setAttribute("style", "background-color: rgb(250" + "," + color + "," + color + ")");
+  //favorite color
+  var color = 200;
+
+  //change background color using hsl
+  box.setAttribute("style", "background-color: hsl(" + color + ",100%," + shade + "%)");
   console.log(box.getAttribute("style", "background-color"));
 };
 
@@ -53,12 +65,13 @@ var score = 0;
 
 //see if click was close enough to target and display alert accordingly
 var click = function(e) {
-  if (distance(e.x, e.y, targetX, targetY) < 30) {
+  if (distance(e.x, e.y, targetX, targetY) < 50) {
     //increment score, display alert, and change target location for next round
     score ++;
     alert("Congrats you got it!!!!\nScore: " + score);
     targetX = Math.floor(Math.random() * boxWidth);
     targetY = Math.floor(Math.random() * boxWidth);
+    maxLength = getMax();
   }
   else {
     alert("You missed! Try again");
