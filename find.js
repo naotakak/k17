@@ -21,7 +21,7 @@ console.log("targetX: " + targetX + " targetY: " + targetY);
 console.log( "box height: " + boxHeight );
 console.log( "box width: " + boxWidth );
 
-//calculate distance between current mouse pos and target
+//calculate distance two points
 var distance = function (x0, y0, x1, y1) {
   var deltaX = x0 - x1;
   var deltaY = y0 - y1;
@@ -44,7 +44,7 @@ var maxLength = getMax();
 var findIt = function(e) {
   console.log("e.X " + e.x + "e.Y " + e.y);
 
-  //distance of mouse from target
+  //distance from mouse to target
   var mouseDistance = distance(e.x, e.y, targetX, targetY);
   console.log("mousedist " + mouseDistance);
 
@@ -70,11 +70,11 @@ var click = function(e) {
     score ++;
     alert("Congrats you got it!!!!\nScore: " + score);
     targetX = Math.floor(Math.random() * boxWidth);
-    targetY = Math.floor(Math.random() * boxWidth);
+    targetY = Math.floor(Math.random() * boxHeight);
     maxLength = getMax();
   }
   else {
-    alert("You missed! Try again");
+    alert("You missed! Try again.");
   }
 };
 
